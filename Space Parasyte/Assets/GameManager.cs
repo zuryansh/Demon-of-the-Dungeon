@@ -14,14 +14,17 @@ public class GameManager : MonoBehaviour
         {
             PauseGame();
         }
+        isPaused = (Time.timeScale == 0);
+        //Debug.Log(Time.timeScale);
     }
 
     public void GoToScene(string scene)
     {
         SceneManager.LoadScene(scene);
         Utilities.ResetVariables();
-        if(Time.timeScale<1) // if the game is paused when we switch scenes unpause game
-            PauseGame();
+        
+            UnpauseGame();
+        
     }
 
     public void QuitGame()
@@ -34,21 +37,29 @@ public class GameManager : MonoBehaviour
 
     public void PauseGame()
     {
+
         if (!isPaused)
         {
             //pause game
             Time.timeScale = 0;
             Utilities.pauseScreen.SetActive(true);
-            isPaused = true;
+            //isPaused = true;
+            Debug.Log("PAUSE");
         }
-        else if (isPaused)
-        {
+        
+        
+    }
+
+    public void UnpauseGame()
+    {
+        
+        
             //unpause game
             Time.timeScale = 1;
             Utilities.pauseScreen.SetActive(false);
-
-            isPaused = false;
-        }
+            Debug.Log("UNPAUSE");
+            //isPaused = false;
+        
     }
 
     public static void RestartGame()

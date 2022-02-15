@@ -104,7 +104,7 @@ public class enemy : MonoBehaviour
         
         isAttacked = true;
         Utilities.instance.EnemyHit();
-        CinemachineShake.Instance.ShakeCamera(2.5f, 0.1f);
+        CinemachineShake.Instance.ShakeCamera(0.7f, 0.1f);
 
         spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.2f);

@@ -8,6 +8,7 @@ TagManager:
   - GameManager
   - PauseScreen
   - AudioManager
+  - EventSystem
   layers:
   - Default
   - TransparentFX
