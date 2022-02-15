@@ -23,6 +23,7 @@ public class enemy : MonoBehaviour
     public Camera cam;
     public float attackTime;
 
+
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -30,6 +31,7 @@ public class enemy : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        
 
         agent.updateRotation = false;
         agent.updateUpAxis = false;
@@ -101,6 +103,9 @@ public class enemy : MonoBehaviour
     {
         
         isAttacked = true;
+        Utilities.instance.EnemyHit();
+        CinemachineShake.Instance.ShakeCamera(2.5f, 0.1f);
+
         spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.2f);
         spriteRenderer.color = Color.white;

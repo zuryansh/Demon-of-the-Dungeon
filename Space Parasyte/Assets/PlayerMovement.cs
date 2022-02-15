@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
     Rigidbody2D rb;
     Vector2 movement;
-    bool canBeDamaged = true;
+    public bool canBeDamaged = true;
 
     public float speed;
 
@@ -19,6 +20,10 @@ public class PlayerMovement : MonoBehaviour
     public bool isAttaclng;
     public int health;
     public float invincibilityTime;
+
+    public TextMeshProUGUI coinsText;
+    public GameObject deathScreen;
+    float timeSinceChange;
 
     private void Start()
     {
@@ -32,6 +37,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+
+        coinsText.text = coins.ToString();
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
         movement = new Vector2(x, y).normalized * speed * 10;
@@ -39,6 +46,13 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             StartCoroutine(Attack());
+        }
+
+    
+        if ( Time.realtimeSinceStartup - timeSinceChange > 3)
+        {
+            canBeDamaged = true;
+            timeSinceChange = Time.realtimeSinceStartup;
         }
 
         #region Animator Setting
@@ -82,6 +96,9 @@ public class PlayerMovement : MonoBehaviour
 
     public IEnumerator TakeDamage(int damage)
     {
+
+        
+
         if (canBeDamaged)
         {
             canBeDamaged = false;
@@ -90,12 +107,20 @@ public class PlayerMovement : MonoBehaviour
             healthSlider.value = health;
             if (health <= 0)
             {
-                Destroy(gameObject);
+                Die();
             }
             yield return new WaitForSeconds(invincibilityTime);
             canBeDamaged = true;
+            timeSinceChange = Time.realtimeSinceStartup;
+
         }
     }
 
-
+    public void Die()
+    {
+        coins = 0;
+        canBeDamaged = true;
+        deathScreen.SetActive(true);
+        enabled = false;
+    }
 }
