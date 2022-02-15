@@ -1,26 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
     Rigidbody2D rb;
     Vector2 movement;
+    bool canBeDamaged = true;
+
     public float speed;
-    public Collider2D attackCollider;
+
     public Animator Animator;
 
 
-
+    public Slider healthSlider;
     public int coins = 0;
     public bool isAttaclng;
     public int health;
+    public float invincibilityTime;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        attackCollider.enabled = false;
-        
+
+
+        healthSlider.maxValue = health;
+        healthSlider.value = health;
+
     }
 
     private void Update()
@@ -52,12 +59,6 @@ public class PlayerMovement : MonoBehaviour
 
         rb.velocity = movement * Time.fixedDeltaTime;
         
-        //if (rb.velocity.sqrMagnitude > 0.1)
-        //{
-        //    Vector2 dir = rb.velocity;
-        //    float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        //    transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        //}
     }
 
     public IEnumerator Attack()
@@ -79,12 +80,20 @@ public class PlayerMovement : MonoBehaviour
 
     
 
-    public void TakeDamage(int damage)
+    public IEnumerator TakeDamage(int damage)
     {
-        health -= damage;
-        if (health <= 0)
+        if (canBeDamaged)
         {
-            //Die
+            canBeDamaged = false;
+
+            health -= damage;
+            healthSlider.value = health;
+            if (health <= 0)
+            {
+                Destroy(gameObject);
+            }
+            yield return new WaitForSeconds(invincibilityTime);
+            canBeDamaged = true;
         }
     }
 
