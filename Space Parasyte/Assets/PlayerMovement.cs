@@ -8,51 +8,37 @@ public class PlayerMovement : MonoBehaviour
 {
     Rigidbody2D rb;
     Vector2 movement;
-    public bool canBeDamaged = true;
 
     public float speed;
 
     public Animator Animator;
+    public float dashSpeed;
+    public float dashTime;
+    public ParticleSystem dashParticles;
+    public ParticleSystem cooldownParticles;
+    public float dashCooldown;
+    bool canDash = true;
+    Player playerScript;
 
-
-    public Slider healthSlider;
-    public int coins = 0;
-    public bool isAttaclng;
-    public int health;
-    public float invincibilityTime;
-
-    public TextMeshProUGUI coinsText;
-    public GameObject deathScreen;
-    float timeSinceChange;
+    bool isDashing;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
-
-        healthSlider.maxValue = health;
-        healthSlider.value = health;
+        playerScript = GetComponent<Player>();
 
     }
 
     private void Update()
     {
 
-        coinsText.text = coins.ToString();
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
         movement = new Vector2(x, y).normalized * speed * 10;
 
-        if (Input.GetMouseButtonDown(0))
+        if(Input.GetKeyDown(KeyCode.Space) && !isDashing && canDash)
         {
-            StartCoroutine(Attack());
-        }
-
-    
-        if ( Time.realtimeSinceStartup - timeSinceChange > 3)
-        {
-            canBeDamaged = true;
-            timeSinceChange = Time.realtimeSinceStartup;
+            StartCoroutine(Dash());
         }
 
         #region Animator Setting
@@ -75,52 +61,20 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
-    public IEnumerator Attack()
+    public IEnumerator Dash()
     {
-
-        Animator.SetTrigger("Attack");
-        isAttaclng = true;
-
-        yield return new WaitForSeconds(0.2f);
-
-        isAttaclng = false;
+        canDash = false;
+        isDashing = true; // state mangagement
+        playerScript.canBeDamaged = false; // make player immune
+        speed *= dashSpeed; // dash
+        dashParticles.Play(); // play effects
+        yield return new WaitForSeconds(dashTime); // for duration
+        playerScript.canBeDamaged = true; 
+        speed /= dashSpeed;                  // return to normal
+        isDashing = false;
+        yield return new WaitForSeconds(dashCooldown); // cooldown
+        cooldownParticles.Play();  // regain dash
+        canDash = true;
     }
-
-
-    public void AwardCoins(int coinsNum)
-    {
-        coins += coinsNum;
-    }
-
-    
-
-    public IEnumerator TakeDamage(int damage)
-    {
-
-        
-
-        if (canBeDamaged)
-        {
-            canBeDamaged = false;
-
-            health -= damage;
-            healthSlider.value = health;
-            if (health <= 0)
-            {
-                Die();
-            }
-            yield return new WaitForSeconds(invincibilityTime);
-            canBeDamaged = true;
-            timeSinceChange = Time.realtimeSinceStartup;
-
-        }
-    }
-
-    public void Die()
-    {
-        coins = 0;
-        canBeDamaged = true;
-        deathScreen.SetActive(true);
-        enabled = false;
-    }
+ 
 }
