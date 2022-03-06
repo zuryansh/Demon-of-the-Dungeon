@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     public float dashCooldown;
     bool canDash = true;
     Player playerScript;
+    Vector2 input;
 
     bool isDashing;
 
@@ -31,10 +32,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        
+        input.x = Input.GetAxisRaw("Horizontal");
+        input.y = Input.GetAxisRaw("Vertical");
 
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
-        movement = new Vector2(x, y).normalized * speed * 10;
+        
+
+        movement = input.normalized * speed * 10;
 
         if(Input.GetKeyDown(KeyCode.Space) && !isDashing && canDash)
         {
@@ -77,4 +81,9 @@ public class PlayerMovement : MonoBehaviour
         canDash = true;
     }
  
+    public Vector2 GetPlayerDirection()
+    {
+        return input;
+    }
+
 }

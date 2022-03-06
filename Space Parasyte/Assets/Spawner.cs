@@ -5,7 +5,7 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     public GameObject enemy;
-
+    public Collider2D roomBounds;
     public int maxEnemyNum;
     public int currentEnemyNum;
     public float spawnTime;
@@ -60,12 +60,14 @@ public class Spawner : MonoBehaviour
         Vector2 position = GetRandomPosition();
         //Vector2 position = new Vector2(Random.Range(-11f, 10f), Random.Range(-10f, 2.7f));
         Instantiate(enemy, position , Quaternion.identity);
+        Debug.Log("SPAWN");
     }
 
     Vector2 GetRandomPosition()
     {
-        float x = Random.Range(-11f, 10f);
-        float y = Random.Range(-10f, 2.7f);
+        float x = Random.Range(roomBounds.bounds.min.x, roomBounds.bounds.max.x);
+        float y = Random.Range(roomBounds.bounds.min.y, roomBounds.bounds.max.y);
+
         Vector2 position = new Vector2(x, y);
         if(Vector2.Distance(position , player.transform.position) < deadRadius)
         {

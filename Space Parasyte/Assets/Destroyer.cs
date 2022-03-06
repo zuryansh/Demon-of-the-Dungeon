@@ -6,7 +6,7 @@ public class Destroyer : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.transform.CompareTag("Destroyer") )
+        if (collision.GetComponent<RoomSpawner>()!= null )
         {
 
             Debug.Log(collision.gameObject);

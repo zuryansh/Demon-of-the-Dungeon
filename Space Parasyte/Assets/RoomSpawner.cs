@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class RoomSpawner : MonoBehaviour
 {
-     GameObject room;
+    GameObject room;
     Room parentRoom;
     RoomManager roomManager;
+    Collider2D myCollider;
+    public LayerMask layerMask;
+    public GameObject leadsToRoom;
+    public bool canSetRoom;
 
-    RaycastHit2D[] results = new RaycastHit2D[10];
+    List<RaycastHit2D> results = new List<RaycastHit2D>();
+    ContactFilter2D contactFilter = new ContactFilter2D();
 
     public enum SpawnSide
     {
@@ -22,49 +27,86 @@ public class RoomSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
         roomManager = FindObjectOfType<RoomManager>();
         parentRoom = GetComponentInParent<Room>();
-        
+        myCollider = GetComponent<Collider2D>();
+        contactFilter.SetLayerMask(layerMask);
 
-        Invoke("CorrectPosition", 0.1f);
-        
+
+
 
         if (roomManager.currentRooms <= roomManager.maxRooms)
         {
-            Invoke("SpawnRoom", 0.2f);
+            StartCoroutine(SpawnRoom());
         }
     }
 
-    public void CorrectPosition()
+    private void Update()
     {
-        
+        if(roomManager.GetCurrentRoom() == transform.root.gameObject)
+        {
+            canSetRoom = ShouldSetRoom();
+        }
+        else { canSetRoom = false; }
+    }
 
-        
+    Vector2 GetSpawnPosition()
+    {
+
+        Vector2 spawnPosition = transform.position;
+
         if (spawnSide == SpawnSide.Top)
         {
-            transform.localPosition += new Vector3(0, parentRoom.roomHeight/2,0);
+            spawnPosition = transform.position + new Vector3(0, parentRoom.roomHeight / 2, 0);
         }
         else if (spawnSide == SpawnSide.Bottom)
         {
-            transform.localPosition -= new Vector3(0, parentRoom.roomHeight/2,0);
+            spawnPosition = transform.position - new Vector3(0, parentRoom.roomHeight / 2, 0);
         }
         else if (spawnSide == SpawnSide.Right)
         {
-            transform.localPosition += new Vector3(parentRoom.roomWidth/2 ,0,0);
+            spawnPosition = transform.position + new Vector3(parentRoom.roomWidth / 2, 0, 0);
         }
         else if (spawnSide == SpawnSide.Left)
         {
-            transform.localPosition -= new Vector3(parentRoom.roomWidth/2 ,0,0);
+            spawnPosition = transform.position - new Vector3(parentRoom.roomWidth / 2, 0, 0);
         }
+
+        return spawnPosition;
     }
 
-   
-
-    public void SpawnRoom()
+    void CastColliderFromDoor()
     {
-       
-        roomManager.currentRooms++;
+        //results.Clear();
+
+        if (spawnSide == SpawnSide.Top || spawnSide == SpawnSide.Bottom)
+        {
+            myCollider.Cast(transform.up, contactFilter, results, parentRoom.roomHeight / 2);
+        }
+        else if (spawnSide == SpawnSide.Right || spawnSide == SpawnSide.Left)
+        {
+
+            myCollider.Cast(transform.up, contactFilter, results, parentRoom.roomWidth / 2);
+        }
+
+    }
+
+    bool CheckValidSpawn()
+    {
+
+        CastColliderFromDoor();
+
+        return !(results.Count > 0);
+
+
+    }
+
+    public IEnumerator SpawnRoom()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        #region Room Selection
         if (spawnSide == SpawnSide.Top)
         {
             room = roomManager.BottomRooms[Random.Range(0, roomManager.BottomRooms.Length)];
@@ -84,11 +126,79 @@ public class RoomSpawner : MonoBehaviour
             room = roomManager.RightRooms[Random.Range(0, roomManager.BottomRooms.Length)];
 
         }
+        #endregion
 
-        Instantiate(room, transform.position, Quaternion.identity);
-        
-        Destroy(gameObject);
+        if (CheckValidSpawn())
+        {
+            leadsToRoom = Instantiate(room, GetSpawnPosition(), Quaternion.identity);
+            roomManager.currentRooms++;
+        }
+
+
+
     }
 
+    void SetRoom()
+    {
+        
+        if (leadsToRoom != null)
+        {
+            roomManager.SetCurrentRoom(leadsToRoom);
+        }
+        else
+        {
+            roomManager.SetCurrentRoom(transform.root.gameObject);
+        }
+
+    }
+
+    public void SetLeadingRoom()
+    {
+        CastColliderFromDoor();
+
+        //Debug.Log(results.Count , gameObject);
+        if (results.Count > 0)
+        {
+            leadsToRoom = results[0].transform.root.gameObject;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.GetComponent<Player>() != null && canSetRoom)
+        {
+            Debug.Log("TRIGGER ENTER" , gameObject);
+            Invoke("SetRoom", 0.2f);
+        }
+
+    }
+
+    bool ShouldSetRoom()
+    {
+        Vector2 playerDir = Utilities.player.GetPlayerDirection();
+        //Debug.Log(playerDir); 
+
+        if(spawnSide == SpawnSide.Top && playerDir.y > 0)
+        {// moving up
+            
+            return true;
+        }
+        else if (spawnSide == SpawnSide.Bottom && playerDir.y < 0)
+        {//movig down
+            return true;
+        }
+
+        else if (spawnSide == SpawnSide.Right && playerDir.x > 0)
+        {// moving right
+            return true;
+        }
+        else if (spawnSide == SpawnSide.Left && playerDir.x < 0)
+        {//moving left
+            return true;
+        }
+        
+
+        return false;
+    }
 
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 using UnityEngine.Audio;
 
@@ -12,11 +13,13 @@ public class Utilities : MonoBehaviour
     public GameObject blood;
     public  AudioSource enemyHit;
     public static Utilities instance;
+    public static CinemachineVirtualCamera vCam;
 
     private void Start()
     {
         instance = this;
         enemyHit = GetComponent<AudioSource>();
+
 
         ResetVariables();
     }
@@ -29,6 +32,7 @@ public class Utilities : MonoBehaviour
             pauseScreen.SetActive(false);
 
         MainCam = Camera.main;
+        vCam = FindObjectOfType<CinemachineVirtualCamera>();
         player = FindObjectOfType<PlayerMovement>();
         
     }
