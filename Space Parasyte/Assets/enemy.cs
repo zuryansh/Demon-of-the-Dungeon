@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class enemy : MonoBehaviour
 {
     SpriteRenderer spriteRenderer;
-
+    GameObject spawnedFrom;
     public Player player;
 
     [HideInInspector]public Animator animator;
@@ -47,6 +47,7 @@ public class enemy : MonoBehaviour
     public void Die()
     {
         player.AwardCoins(rewardedCoins);
+        spawnedFrom.GetComponent<Spawner>().enemiesList.Remove(gameObject);
         Destroy(gameObject);
     }
 
@@ -66,6 +67,9 @@ public class enemy : MonoBehaviour
         TakeDamage(damage);
     }
 
-
+    public void SetSpawnedFrom(GameObject spawner)
+    {
+        spawnedFrom = spawner;
+    }
 
 }

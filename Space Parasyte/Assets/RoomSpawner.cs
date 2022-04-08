@@ -132,6 +132,7 @@ public class RoomSpawner : MonoBehaviour
         {
             leadsToRoom = Instantiate(room, GetSpawnPosition(), Quaternion.identity);
             roomManager.currentRooms++;
+            leadsToRoom.transform.name = "Room" + roomManager.currentRooms;
         }
 
 
@@ -163,7 +164,7 @@ public class RoomSpawner : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.GetComponent<Player>() != null && canSetRoom)
         {

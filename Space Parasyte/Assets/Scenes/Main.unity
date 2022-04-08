@@ -8928,6 +8928,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 6803861049747286747, guid: f076491df781ad149be5dd0df5bee9d8, type: 3}
+  roomBounds: {fileID: 0}
   maxEnemyNum: 5
   currentEnemyNum: 0
   spawnTime: 1

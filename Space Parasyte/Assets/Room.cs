@@ -6,11 +6,14 @@ public class Room : MonoBehaviour
 {
     public float roomHeight;
     public float roomWidth;
+    public Spawner enemySpawner;
     public List<GameObject> Doors = new List<GameObject>();
 
     public GameObject indicator;
     public PolygonCollider2D confiner;
     RoomManager roomManager;
+
+    public bool hasBeenBeaten = true;
 
     bool done = true;
     bool once = false;
@@ -18,6 +21,7 @@ public class Room : MonoBehaviour
     private void Start()
     {
         roomManager = FindObjectOfType<RoomManager>();
+        enemySpawner = GetComponentInChildren<Spawner>(true);
 
         roomManager.rooms.Add(this);
 
@@ -33,17 +37,54 @@ public class Room : MonoBehaviour
         if (done && roomManager.hasFinishedSpawning)
         {
 
-            StartCoroutine(SetDoorColliders());
+            StartCoroutine(GetDoorColliders());
+        }
+
+        if (enemySpawner != null)
+        {   if (roomManager.GetCurrentRoom() == gameObject)
+            {
+                SetSpawnerState();
+
+                SetRoomState();
+            }
+            //if (hasBeenBeaten)
+            //{
+            //    SetDoorColliders(true);
+            //}
         }
     }
 
-    IEnumerator SetDoorColliders()
+    public void SetSpawnerState()
+    {
+
+        if (!enemySpawner.gameObject.activeInHierarchy)
+        {
+            enemySpawner.gameObject.SetActive(true);
+        }
+        else if (roomManager.GetCurrentRoom() != gameObject)
+        {
+            enemySpawner.gameObject.SetActive(false);
+        }
+    }
+
+    public void SetRoomState()
+    {
+        if (enemySpawner.enemiesList.Count <= 0)
+        {
+            //all enemies have been defeated
+            hasBeenBeaten = true;
+        }
+    }
+
+    IEnumerator GetDoorColliders()
     {
         done = false;
 
 
-        if (roomManager.GetCurrentRoom() == gameObject)
+        if (roomManager.GetCurrentRoom() == gameObject && hasBeenBeaten)
         {
+            // it is current room
+
             if(roomManager.rooms[0] == this && !once)
             {
                 //it is starting room
@@ -52,19 +93,21 @@ public class Room : MonoBehaviour
             }
 
             // set colliders to trigger
-            foreach (GameObject door in Doors)
-            {
-                door.GetComponent<Collider2D>().isTrigger = true;
-            }
+            SetDoorColliders(true);
         }
         else
         {
-            // set colliders to trigger
-            foreach (GameObject door in Doors)
-            {
-                door.GetComponent<Collider2D>().isTrigger = false;
-            }
+            SetDoorColliders(false);
         }
         done = true;
+    }
+
+    public void SetDoorColliders(bool val) {
+
+            foreach (GameObject door in Doors)
+        {
+            //yield return new WaitForSeconds(0.5f);
+            door.GetComponent<Collider2D>().isTrigger = val;
+        }
     }
 }

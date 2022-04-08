@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using UnityEngine.AI;
 
 public class RoomManager : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class RoomManager : MonoBehaviour
      [SerializeField]GameObject currentRoom;
     public bool hasFinishedSpawning;
 
+    public NavMeshSurface2d surface;
 
 
     private void Start()
@@ -71,6 +73,7 @@ public class RoomManager : MonoBehaviour
             }
         }
 
+        //surface.BuildNavMesh();
 
     }
 
