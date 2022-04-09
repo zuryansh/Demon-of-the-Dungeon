@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class Room : MonoBehaviour
 {
+    CinemachineConfiner CMconfiner;
+
     public float roomHeight;
     public float roomWidth;
     public Spawner enemySpawner;
@@ -20,6 +23,8 @@ public class Room : MonoBehaviour
 
     private void Start()
     {
+        CMconfiner = FindObjectOfType<CinemachineConfiner>();
+
         roomManager = FindObjectOfType<RoomManager>();
         enemySpawner = GetComponentInChildren<Spawner>(true);
 
@@ -44,14 +49,14 @@ public class Room : MonoBehaviour
         {   if (roomManager.GetCurrentRoom() == gameObject)
             {
                 SetSpawnerState();
-
+                CMconfiner.m_BoundingShape2D = confiner;
                 SetRoomState();
             }
-            //if (hasBeenBeaten)
-            //{
-            //    SetDoorColliders(true);
-            //}
         }
+            if (hasBeenBeaten)
+            {
+                SetDoorColliders(true);
+            }
     }
 
     public void SetSpawnerState()
