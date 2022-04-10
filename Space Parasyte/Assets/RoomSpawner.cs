@@ -38,7 +38,7 @@ public class RoomSpawner : MonoBehaviour
 
         if (roomManager.currentRooms <= roomManager.maxRooms)
         {
-            StartCoroutine(SpawnRoom());
+            SpawnRoom();
         }
     }
 
@@ -102,9 +102,9 @@ public class RoomSpawner : MonoBehaviour
 
     }
 
-    public IEnumerator SpawnRoom()
+    public void SpawnRoom()
     {
-        yield return new WaitForSeconds(0.2f);
+        //yield return new WaitForSeconds(0f);
 
         #region Room Selection
         if (spawnSide == SpawnSide.Top)
@@ -155,6 +155,7 @@ public class RoomSpawner : MonoBehaviour
 
     public void SetLeadingRoom()
     {
+
         CastColliderFromDoor();
 
         //Debug.Log(results.Count , gameObject);

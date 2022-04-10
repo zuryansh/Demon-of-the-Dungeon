@@ -6,13 +6,19 @@ using Cinemachine;
 public class Room : MonoBehaviour
 {
     CinemachineConfiner CMconfiner;
-
+    public enum RoomType
+    {
+        NormalRoom,
+        BossRoom
+    }
+    public RoomType roomType;
     public float roomHeight;
     public float roomWidth;
     public Spawner enemySpawner;
     public List<GameObject> Doors = new List<GameObject>();
+    public GameObject[] minimapIcon;
 
-    public GameObject indicator;
+
     public PolygonCollider2D confiner;
     RoomManager roomManager;
 
@@ -41,43 +47,84 @@ public class Room : MonoBehaviour
     {
         if (done && roomManager.hasFinishedSpawning)
         {
-
             StartCoroutine(GetDoorColliders());
         }
+        if (roomManager.GetCurrentRoom() == gameObject) 
+        {
+            if (roomType == RoomType.NormalRoom)
+            {
+                if (enemySpawner != null)
+                {
 
-        if (enemySpawner != null)
-        {   if (roomManager.GetCurrentRoom() == gameObject)
+                    SetSpawnerState(enemySpawner.gameObject);
+                    CMconfiner.m_BoundingShape2D = confiner;
+                    SetRoomState(enemySpawner.gameObject);
+                }
+            }
+            if(roomType == RoomType.BossRoom)
             {
-                SetSpawnerState();
+                BossSpawner spawner = GetComponentInChildren<BossSpawner>(true);
+                SetSpawnerState(spawner.gameObject);
+                Debug.Log("HERER");
                 CMconfiner.m_BoundingShape2D = confiner;
-                SetRoomState();
+                SetRoomState(spawner.gameObject);
             }
+            // if we are the current room show on the map
+            SetMinimapIcon(true);
+            
         }
-            if (hasBeenBeaten)
-            {
-                SetDoorColliders(true);
-            }
+        else
+        {
+            SetMinimapIcon(hasBeenBeaten);
+        }
+
+        if (hasBeenBeaten)
+        {
+            SetDoorColliders(true); 
+        }
+        
+        
     }
 
-    public void SetSpawnerState()
+    void SetMinimapIcon(bool val)
+    {
+        
+        foreach (GameObject icon in minimapIcon)
+        {
+            icon.SetActive(val);
+        }
+    }
+
+    public void SetSpawnerState(GameObject spawner)
     {
 
-        if (!enemySpawner.gameObject.activeInHierarchy)
+        if (!spawner.activeInHierarchy)
         {
-            enemySpawner.gameObject.SetActive(true);
+            spawner.SetActive(true);
         }
         else if (roomManager.GetCurrentRoom() != gameObject)
         {
-            enemySpawner.gameObject.SetActive(false);
+            spawner.SetActive(false);
         }
     }
 
-    public void SetRoomState()
+    public void SetRoomState(GameObject spawner )
     {
-        if (enemySpawner.enemiesList.Count <= 0)
+        if (roomType == RoomType.NormalRoom)
         {
-            //all enemies have been defeated
-            hasBeenBeaten = true;
+            if (enemySpawner.enemiesList.Count <= 0)
+            {
+                //all enemies have been defeated
+                hasBeenBeaten = true;
+            }
+        }
+        if (roomType == RoomType.BossRoom)
+        {
+            if (spawner.GetComponent<BossSpawner>().enemiesList.Count <= 0)
+            {
+                //all enemies have been defeated
+                hasBeenBeaten = true;
+            }
         }
     }
 

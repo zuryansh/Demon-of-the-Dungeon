@@ -7,6 +7,7 @@ using TMPro;
 public class Player : MonoBehaviour
 {
     public int health;
+    public int maxHealth;
     public int attackDamage;
 
     float timeSinceChange;
@@ -22,6 +23,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        health = maxHealth;
         healthSlider.maxValue = health;
         healthSlider.value = health;
         rb = GetComponent<Rigidbody2D>();
@@ -78,4 +80,15 @@ public class Player : MonoBehaviour
         rb.velocity = Vector2.zero;
     }
 
+    public void AddHealth(int health)
+    {
+
+        this.health += health; // add health to current health
+        if (this.health > maxHealth) // limit our health to the max health
+        {
+            this.health = maxHealth;
+        }
+        healthSlider.value = this.health;
+
+    }
 }

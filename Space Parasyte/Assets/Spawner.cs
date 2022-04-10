@@ -73,7 +73,7 @@ public class Spawner : MonoBehaviour
         GameObject spawned = Instantiate(enemy, position, Quaternion.identity);
         spawned.GetComponent<enemy>().SetSpawnedFrom(gameObject);
         enemiesList.Add(spawned);
-        Debug.Log("SPAWN");
+        //Debug.Log("SPAWN");
     }
 
     Vector2 GetRandomPosition()

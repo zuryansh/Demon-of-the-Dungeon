@@ -22,6 +22,7 @@ public class enemy : MonoBehaviour
     //public Camera cam;
     public float attackTime;
     public Slider healthSlider;
+    public GameObject[] loot;
     
 
     private void Awake()
@@ -47,7 +48,21 @@ public class enemy : MonoBehaviour
     public void Die()
     {
         player.AwardCoins(rewardedCoins);
-        spawnedFrom.GetComponent<Spawner>().enemiesList.Remove(gameObject);
+        if (spawnedFrom.GetComponent<Spawner>() != null)
+        {
+            spawnedFrom.GetComponent<Spawner>().enemiesList.Remove(gameObject);
+        }
+        else
+        {
+            spawnedFrom.GetComponent<BossSpawner>().enemiesList.Remove(gameObject);
+        }
+        //spawn loot
+        if (Random.Range(0, 3) < 1)
+        {
+            GameObject drop = loot[Random.Range(0, loot.Length)];
+            Instantiate(drop, transform.position, Quaternion.identity);
+        }
+
         Destroy(gameObject);
     }
 

@@ -20,12 +20,14 @@ public class PlayerMovement : MonoBehaviour
     bool canDash = true;
     Player playerScript;
     Vector2 input;
-
-    bool isDashing;
+    public float dashDistance;
+    Collider2D playerCollider;
+    public bool isDashing;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerCollider = GetComponent<Collider2D>();
         playerScript = GetComponent<Player>();
 
     }
@@ -67,20 +69,56 @@ public class PlayerMovement : MonoBehaviour
 
     public IEnumerator Dash()
     {
+
+
         canDash = false;
         isDashing = true; // state mangagement
+
         playerScript.canBeDamaged = false; // make player immune
         speed *= dashSpeed; // dash
         dashParticles.Play(); // play effects
+
+        //Cast a collider
+        CastDashSphere();
+
+
+
+
         yield return new WaitForSeconds(dashTime); // for duration
+        playerCollider.isTrigger = false;
         playerScript.canBeDamaged = true; 
         speed /= dashSpeed;                  // return to normal
         isDashing = false;
+
         yield return new WaitForSeconds(dashCooldown); // cooldown
         cooldownParticles.Play();  // regain dash
         canDash = true;
+
     }
- 
+    
+    void CastDashSphere()
+    {
+        ContactFilter2D filter = new ContactFilter2D();
+
+        RaycastHit2D[] results = new RaycastHit2D[15];
+        Physics2D.CircleCast(transform.position, dashDistance, Vector2.zero, filter, results);
+
+        foreach (RaycastHit2D hit in results)
+        {
+            if (hit.transform != null)
+            {
+                if (hit.transform.gameObject.layer == 3) // 3 is the level layer
+                {
+                    //we hit the level
+                    return;
+
+                }
+                
+            }
+        }
+        playerCollider.isTrigger = true;
+    }
+
     public Vector2 GetPlayerDirection()
     {
         return input;
