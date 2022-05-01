@@ -11,6 +11,7 @@ public class RoomSpawner : MonoBehaviour
     public LayerMask layerMask;
     public GameObject leadsToRoom;
     public bool canSetRoom;
+    bool once;
 
     List<RaycastHit2D> results = new List<RaycastHit2D>();
     ContactFilter2D contactFilter = new ContactFilter2D();
@@ -36,7 +37,7 @@ public class RoomSpawner : MonoBehaviour
 
 
 
-        if (roomManager.currentRooms <= roomManager.maxRooms)
+        if (roomManager.rooms.Count <= roomManager.maxRooms)
         {
             SpawnRoom();
         }
@@ -49,6 +50,9 @@ public class RoomSpawner : MonoBehaviour
             canSetRoom = ShouldSetRoom();
         }
         else { canSetRoom = false; }
+
+
+
     }
 
     Vector2 GetSpawnPosition()
@@ -131,8 +135,8 @@ public class RoomSpawner : MonoBehaviour
         if (CheckValidSpawn())
         {
             leadsToRoom = Instantiate(room, GetSpawnPosition(), Quaternion.identity);
-            roomManager.currentRooms++;
-            leadsToRoom.transform.name = "Room" + roomManager.currentRooms;
+            
+            leadsToRoom.transform.name = "Room" + roomManager.rooms.Count;
         }
 
 
@@ -177,7 +181,7 @@ public class RoomSpawner : MonoBehaviour
 
     bool ShouldSetRoom()
     {
-        Vector2 playerDir = Utilities.player.GetPlayerDirection();
+        Vector2 playerDir = Utilities.playerMovement.GetPlayerDirection();
         //Debug.Log(playerDir); 
 
         if(spawnSide == SpawnSide.Top && playerDir.y > 0)

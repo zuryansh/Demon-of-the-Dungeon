@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class weapon : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class weapon : MonoBehaviour
                 StartCoroutine(collision.GetComponent<enemy>().GotHit(attackDamage));
                 Vector3 position = collision.transform.position;
                 GameObject blood = Instantiate(Utilities.instance.blood, position, Quaternion.Euler(0, 0, Random.Range(1, 360)));
+                
+
+               
                 Destroy(blood, 0.5f);
             }
         }

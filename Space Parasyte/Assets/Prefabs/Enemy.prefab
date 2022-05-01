@@ -523,7 +523,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 186fd9dfb68575c48a7587ffae7f133e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -569,22 +569,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca7f454c2e0e9bd4491bac3c844b7839, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SO: {fileID: 11400000, guid: e9e7256ba47a2f34c899ee108e2ad5a5, type: 2}
   player: {fileID: 0}
   animator: {fileID: 0}
   isAttacked: 0
   health: 10
-  rewardedCoins: 5
-  attackTime: 0
   healthSlider: {fileID: 5994171297702634738}
-  loot:
-  - {fileID: 1116685777687469755, guid: 79c0afcdc0fbed24d9add5d803e97179, type: 3}
-  - {fileID: 1116685777687469755, guid: 79c0afcdc0fbed24d9add5d803e97179, type: 3}
-  - {fileID: 1116685777687469755, guid: 79c0afcdc0fbed24d9add5d803e97179, type: 3}
-  - {fileID: 1116685777687469755, guid: 79c0afcdc0fbed24d9add5d803e97179, type: 3}
-  - {fileID: 1116685777687469755, guid: 79c0afcdc0fbed24d9add5d803e97179, type: 3}
-  - {fileID: 5278099722470645267, guid: b0138789e92667844ae90f0bfabaaeb5, type: 3}
-  - {fileID: 960093310674846935, guid: 64d52a0c9921b2b42a913f845a071146, type: 3}
-  - {fileID: 1116685777687469755, guid: 79c0afcdc0fbed24d9add5d803e97179, type: 3}
 --- !u!95 &915552786
 Animator:
   serializedVersion: 3
@@ -616,10 +606,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02b8533754700d24fa180a0e03ec90f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSight: 10
-  speed: 10
   agent: {fileID: 6803861049747286721}
   cam: {fileID: 0}
+  path: 0
 --- !u!114 &407685843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -633,7 +622,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isAttacking: 0
-  damage: 2
 --- !u!61 &8944846479014492842
 BoxCollider2D:
   m_ObjectHideFlags: 0

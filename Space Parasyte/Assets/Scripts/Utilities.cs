@@ -9,11 +9,14 @@ public class Utilities : MonoBehaviour
 {
     public static GameObject pauseScreen;
     public static Camera MainCam;
-    public static PlayerMovement player;
+    public static Player player;
+    public static PlayerMovement playerMovement;
     public GameObject blood;
     public  AudioSource enemyHit;
     public static Utilities instance;
     public static CinemachineVirtualCamera vCam;
+    public  GameObject BossSkull;
+    public  GameObject PopupText;
 
     private void Start()
     {
@@ -33,11 +36,12 @@ public class Utilities : MonoBehaviour
 
         MainCam = Camera.main;
         vCam = FindObjectOfType<CinemachineVirtualCamera>();
-        player = FindObjectOfType<PlayerMovement>();
+        player = FindObjectOfType<Player>();
+        playerMovement = FindObjectOfType<PlayerMovement>();
         
     }
 
-    public void EnemyHit()
+    public void EnemyHit()  
     {
         if (!enemyHit.isPlaying)
         {

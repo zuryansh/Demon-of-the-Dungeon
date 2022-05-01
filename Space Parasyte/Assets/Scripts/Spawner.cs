@@ -8,13 +8,14 @@ public class Spawner : MonoBehaviour
     public Collider2D roomBounds;
     public int maxEnemyNum;
     public int currentEnemyNum;
+    Room parentRoom;
 
     public List<GameObject> enemiesList = new List<GameObject>();
     
     bool isSearching;
     public float deadRadius;
     PlayerMovement player;
-
+    bool once;
     float startSpawnTime;
     // Start is called before the first frame update
     void Awake()
@@ -22,6 +23,7 @@ public class Spawner : MonoBehaviour
         player = FindObjectOfType<PlayerMovement>();
         //startSpawnTime = spawnTime;
         roomBounds = GetComponent<Collider2D>();
+        parentRoom = transform.root.GetComponent<Room>();
     }
 
     private void OnEnable()
@@ -44,10 +46,11 @@ public class Spawner : MonoBehaviour
     void Update()
     {
 
-        //if (!isSearching)
-        //{
-        //    StartCoroutine(GetEnemyCount());
-        //}
+        if (parentRoom.roomType == Room.RoomType.BossRoom && !once)
+        {
+            maxEnemyNum = 50;
+            once = true;
+        }
     }
 
     //IEnumerator GetEnemyCount()
@@ -68,26 +71,15 @@ public class Spawner : MonoBehaviour
     void SpawnEnemy()
     {
         
-        Vector2 position = GetRandomPosition();
+        Vector2 position =  parentRoom.GetRandomPosInRoom();
         //Vector2 position = new Vector2(Random.Range(-11f, 10f), Random.Range(-10f, 2.7f));
         GameObject spawned = Instantiate(enemy, position, Quaternion.identity);
         spawned.GetComponent<enemy>().SetSpawnedFrom(gameObject);
+        //spawned.transform.parent = null;
         enemiesList.Add(spawned);
         //Debug.Log("SPAWN");
     }
 
-    Vector2 GetRandomPosition()
-    {
-        float x = Random.Range(roomBounds.bounds.min.x, roomBounds.bounds.max.x);
-        float y = Random.Range(roomBounds.bounds.min.y, roomBounds.bounds.max.y);
 
-        Vector2 position = new Vector2(x, y);
-        if(Vector2.Distance(position , player.transform.position) < deadRadius)
-        {
-            //too close to player
-            GetRandomPosition();
-        }
-        return position;
-    }
     
 }

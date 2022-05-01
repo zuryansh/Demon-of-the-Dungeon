@@ -17,7 +17,7 @@ public class Room : MonoBehaviour
     public Spawner enemySpawner;
     public List<GameObject> Doors = new List<GameObject>();
     public GameObject[] minimapIcon;
-
+   
 
     public PolygonCollider2D confiner;
     RoomManager roomManager;
@@ -26,6 +26,7 @@ public class Room : MonoBehaviour
 
     bool done = true;
     bool once = false;
+
 
     private void Start()
     {
@@ -49,33 +50,36 @@ public class Room : MonoBehaviour
         {
             StartCoroutine(GetDoorColliders());
         }
-        if (roomManager.GetCurrentRoom() == gameObject) 
-        {
-            if (roomType == RoomType.NormalRoom)
-            {
-                if (enemySpawner != null)
-                {
 
-                    SetSpawnerState(enemySpawner.gameObject);
-                    CMconfiner.m_BoundingShape2D = confiner;
-                    SetRoomState(enemySpawner.gameObject);
-                }
-            }
-            if(roomType == RoomType.BossRoom)
-            {
-                BossSpawner spawner = GetComponentInChildren<BossSpawner>(true);
-                SetSpawnerState(spawner.gameObject);
-                Debug.Log("HERER");
-                CMconfiner.m_BoundingShape2D = confiner;
-                SetRoomState(spawner.gameObject);
-            }
-            // if we are the current room show on the map
-            SetMinimapIcon(true);
+        if (roomManager.GetCurrentRoom() == gameObject ) 
+        {
+            
+                //if (roomType == RoomType.NormalRoom)
+                //{
+                    if (enemySpawner != null)
+                    {
+                        
+                        SetSpawnerState(enemySpawner.gameObject);
+                        CMconfiner.m_BoundingShape2D = confiner;
+                        SetRoomState();
+                    }
+                //}
+                //if (roomType == RoomType.BossRoom)
+                //{
+                //    BossSpawner spawner = GetComponentInChildren<BossSpawner>(true);
+                //    SetSpawnerState(spawner.gameObject);
+                //    CMconfiner.m_BoundingShape2D = confiner;
+                //    SetRoomState(spawner.gameObject);
+                //}
+                // if we are the current room show on the map
+                SetMinimapIcon(true);
+                
             
         }
         else
         {
             SetMinimapIcon(hasBeenBeaten);
+            
         }
 
         if (hasBeenBeaten)
@@ -108,24 +112,22 @@ public class Room : MonoBehaviour
         }
     }
 
-    public void SetRoomState(GameObject spawner )
+    public void SetRoomState()
     {
-        if (roomType == RoomType.NormalRoom)
-        {
+        //if (roomType == RoomType.NormalRoom)
+        //{
             if (enemySpawner.enemiesList.Count <= 0)
             {
                 //all enemies have been defeated
                 hasBeenBeaten = true;
+                // add to the defeated rooms list
+                if (!roomManager.defeatedRooms.Contains(gameObject))
+                {
+                    roomManager.defeatedRooms.Add(gameObject);
+                }
             }
-        }
-        if (roomType == RoomType.BossRoom)
-        {
-            if (spawner.GetComponent<BossSpawner>().enemiesList.Count <= 0)
-            {
-                //all enemies have been defeated
-                hasBeenBeaten = true;
-            }
-        }
+        //}
+        
     }
 
     IEnumerator GetDoorColliders()
@@ -162,4 +164,22 @@ public class Room : MonoBehaviour
             door.GetComponent<Collider2D>().isTrigger = val;
         }
     }
+
+    public Vector2 GetRandomPosInRoom()
+    {
+        float x = Random.Range(enemySpawner.roomBounds.bounds.min.x, enemySpawner.roomBounds.bounds.max.x);
+        float y = Random.Range(enemySpawner.roomBounds.bounds.min.y, enemySpawner.roomBounds.bounds.max.y);
+
+        Vector2 position = new Vector2(x, y);
+        if (Vector2.Distance(position, Utilities.player.transform.position) < enemySpawner.deadRadius)
+        {
+            //too close to player
+            GetRandomPosInRoom();
+        }
+        return position;
+    }
+
+
+   
+
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using UnityEngine.AI;
+using TMPro;
 
 
 public class RoomManager : MonoBehaviour
@@ -11,21 +12,24 @@ public class RoomManager : MonoBehaviour
     
 
     public int maxRooms;
-    public int currentRooms;
+    
 
     public List<Room> rooms = new List<Room>();
     public GameObject[] TopRooms;
     public GameObject[] BottomRooms;
     public GameObject[] RightRooms;
     public GameObject[] LeftRooms;
+
+    public List<GameObject> defeatedRooms = new List<GameObject>();
     public GameObject entryRoom;
 
 
     [SerializeField]GameObject currentRoom;
-    [SerializeField] GameObject bossRoom;
+    [SerializeField] Room bossRoom;
     public bool hasFinishedSpawning;
     public GameObject BossRoomPrefab;
-    public NavMeshSurface2d surface;
+    
+    public TextMeshProUGUI roomCounter;
 
 
     private void Awake()
@@ -49,14 +53,23 @@ public class RoomManager : MonoBehaviour
     }
 
 
+    private void Update()
+    {
+        roomCounter.text = (rooms.Count - defeatedRooms.Count).ToString();
+    }
+
     void GetBossRoom()
     {
-        bossRoom = rooms[rooms.Count - 1].gameObject;
-        Vector3 newPosition = bossRoom.transform.position;
-        Destroy(bossRoom);
-        bossRoom =Instantiate(BossRoomPrefab, newPosition, Quaternion.identity);
-        bossRoom.GetComponentInChildren<Tilemap>().color = Color.blue;
         
+
+        bossRoom = rooms[rooms.Count - 1];
+        bossRoom.roomType = Room.RoomType.BossRoom;
+        //Vector3 newPosition = bossRoom.transform.position;
+        //Destroy(bossRoom);
+        //bossRoom =Instantiate(BossRoomPrefab, newPosition, Quaternion.identity);
+        bossRoom.GetComponentInChildren<Tilemap>().color = Color.blue;
+        Instantiate(Utilities.instance.BossSkull, bossRoom.transform.position, Quaternion.identity);
+
     }
 
     public GameObject GetCurrentRoom()
@@ -72,8 +85,7 @@ public class RoomManager : MonoBehaviour
 
         foreach (Room room in rooms)
         {
-            if (room.roomType != Room.RoomType.BossRoom)
-            {
+            
                 foreach (GameObject door in room.Doors)
                 {
                     //disable all the one sided colliders
@@ -87,7 +99,7 @@ public class RoomManager : MonoBehaviour
                     //door.GetComponent<Collider2D>().isTrigger = true;
                 }
             }
-        }
+        
 
         //surface.BuildNavMesh();
 

@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
     public IEnumerator Dash()
     {
-
+        
 
         canDash = false;
         isDashing = true; // state mangagement
@@ -102,9 +102,13 @@ public class PlayerMovement : MonoBehaviour
 
         RaycastHit2D[] results = new RaycastHit2D[15];
         Physics2D.CircleCast(transform.position, dashDistance, Vector2.zero, filter, results);
-
+        
         foreach (RaycastHit2D hit in results)
         {
+            if (hit.transform != null)
+            {
+                //Debug.Log(hit.transform.childCount);
+            }
             if (hit.transform != null)
             {
                 if (hit.transform.gameObject.layer == 3) // 3 is the level layer

@@ -19,6 +19,9 @@ public class Player : MonoBehaviour
     public TextMeshProUGUI coinsText;
     public GameObject deathScreen;
     Rigidbody2D rb;
+    AudioSource playerHit;
+
+    Animator animator;
 
 
     private void Start()
@@ -27,11 +30,14 @@ public class Player : MonoBehaviour
         healthSlider.maxValue = health;
         healthSlider.value = health;
         rb = GetComponent<Rigidbody2D>();
+        playerHit = GetComponent<AudioSource>();
+
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
-
+        
         coinsText.text = coins.ToString();
 
         if (Time.realtimeSinceStartup - timeSinceChange > 3)
@@ -52,10 +58,16 @@ public class Player : MonoBehaviour
     {
 
 
-
         if (canBeDamaged)
         {
+
             canBeDamaged = false;
+
+            //Effects
+            CinemachineShake.Instance.ShakeCamera(4f, 1f);
+            animator.SetTrigger("Hit");
+            playerHit.Play();
+            
 
             health -= damage;
             healthSlider.value = health;
@@ -65,8 +77,9 @@ public class Player : MonoBehaviour
             }
             yield return new WaitForSeconds(invincibilityTime);
             canBeDamaged = true;
-            timeSinceChange = Time.realtimeSinceStartup;
 
+            timeSinceChange = Time.realtimeSinceStartup;
+            
         }
     }
 
