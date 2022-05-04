@@ -138,9 +138,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 6803861049747286747, guid: f076491df781ad149be5dd0df5bee9d8, type: 3}
   roomBounds: {fileID: 0}
+  budget: 30
   maxEnemyNum: 10
   currentEnemyNum: 0
-  enemiesList: []
+  enemies:
+  - {fileID: 6471137097962345974, guid: ef17e56e9b9d4214188ffdec48b3d094, type: 3}
+  - {fileID: 6471137097962345974, guid: cfcd4cc4c14ea504dbb3745b13d2dcc1, type: 3}
+  - {fileID: 6803861049747286747, guid: f076491df781ad149be5dd0df5bee9d8, type: 3}
+  - {fileID: 6803861049747286747, guid: 9f4a4d34795b08f458f2e95c28f587ff, type: 3}
+  - {fileID: 6280891858003086982, guid: dd2aa7de04f897745900c5a26df596ab, type: 3}
+  - {fileID: 6280891858003086982, guid: 034ede4c98fef2b4fa973d9b58f7ff2d, type: 3}
+  spawnedEnemiesList: []
   deadRadius: 5
 --- !u!61 &848586383181212727
 BoxCollider2D:
@@ -1867,6 +1875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a321330214447794fad05312a2363b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomType: 0
   roomHeight: 31.5
   roomWidth: 31.5
   enemySpawner: {fileID: 0}

@@ -20,8 +20,13 @@ public class EnemyAttack : MonoBehaviour
         player = enemyScript.player;
 
         SO = enemyScript.SO;
+        if (SO.enemyType == EnemySO.EnemyType.Bomber)
+        {
+            StartCoroutine(SpawnBomb());
+        }
     }
 
+    
 
     public void CheckForAttack()
     {
@@ -35,6 +40,22 @@ public class EnemyAttack : MonoBehaviour
                     StartCoroutine(RangedAttack());
             }
         }
+    }
+
+    public IEnumerator  SpawnBomb()
+    {
+        yield return new WaitForSeconds(SO.attackCooldown);
+        isAttacking = true;
+        enemyScript.animator.SetTrigger("Attack"); // trigger attack warning 
+
+        yield return new WaitForSeconds(0.3f);  // wait for warning to go away
+
+        Instantiate(SO.bomb, transform.position, Quaternion.identity); // spawn a bomb
+
+        isAttacking = false;
+        StartCoroutine(SpawnBomb());
+        
+        
     }
 
     IEnumerator RangedAttack()

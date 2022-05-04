@@ -403,7 +403,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &1867128562341713249
 MonoBehaviour:
@@ -462,7 +462,7 @@ GameObject:
   - component: {fileID: 407685843}
   - component: {fileID: 8944846479014492842}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Enemy 2
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -569,12 +569,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca7f454c2e0e9bd4491bac3c844b7839, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SO: {fileID: 11400000, guid: e9e7256ba47a2f34c899ee108e2ad5a5, type: 2}
+  SO: {fileID: 11400000, guid: 127fae4e3c2055747bd86aaf82ad64e9, type: 2}
   player: {fileID: 0}
   animator: {fileID: 0}
   isAttacked: 0
   health: 10
   healthSlider: {fileID: 5994171297702634738}
+  spawnerValue: 0
 --- !u!95 &915552786
 Animator:
   serializedVersion: 3

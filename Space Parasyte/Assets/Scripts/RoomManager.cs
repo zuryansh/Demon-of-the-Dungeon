@@ -68,6 +68,7 @@ public class RoomManager : MonoBehaviour
         //Destroy(bossRoom);
         //bossRoom =Instantiate(BossRoomPrefab, newPosition, Quaternion.identity);
         bossRoom.GetComponentInChildren<Tilemap>().color = Color.blue;
+        bossRoom.enemySpawner.budget += 30;
         Instantiate(Utilities.instance.BossSkull, bossRoom.transform.position, Quaternion.identity);
 
     }

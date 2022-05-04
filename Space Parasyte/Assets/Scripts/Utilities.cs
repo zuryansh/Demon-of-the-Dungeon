@@ -17,7 +17,9 @@ public class Utilities : MonoBehaviour
     public static CinemachineVirtualCamera vCam;
     public  GameObject BossSkull;
     public  GameObject PopupText;
+    public int roomBudget;
 
+    bool canPlaySound = true;
     private void Start()
     {
         instance = this;
@@ -49,6 +51,25 @@ public class Utilities : MonoBehaviour
         }
     }
 
+    //public void PlaySound(AudioClip audio)
+    //{
+
+    //    AudioSource[] sources = GetComponents<AudioSource>();
+    //    foreach (AudioSource source in sources)
+    //    {
+    //        if(source.clip != audio)
+    //        {
+    //            AudioSource player =gameObject.AddComponent<AudioSource>();
+    //            if (player.isPlaying!)
+    //            {
+    //                player.Play();
+                    
+    //            }
+    //        }
+    //    }
+    //    Debug.Log("DOne");
+            
+    //}
 
 }
 

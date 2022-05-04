@@ -31,6 +31,7 @@ public class EnemyMovement : MonoBehaviour
 
         SO = enemyScript.SO;
         agent.speed = SO.speed;
+        agent.stoppingDistance = SO.attackRange;
         agent.updateRotation = false;
         agent.updateUpAxis = false;
     }
@@ -41,17 +42,18 @@ public class EnemyMovement : MonoBehaviour
         path = agent.hasPath;
         if (player.transform != null)
         {
-            if (Vector2.Distance(transform.position, player.transform.position) <= SO.maxSight)
+            if ((Vector2.Distance(transform.position, player.transform.position) <= SO.maxSight)
+                && SO.enemyType!=EnemySO.EnemyType.Bomber) // follow player if you see him and not a bomber
             {
                 FollowPlayer();
 
             }
             else
-            {
-                animator.SetBool("isRunning", false);
+            { // cannot see player or your a bomber
                 if (Vector2.Distance(agent.destination , transform.position)<agent.stoppingDistance) // reached its target
                 {
                     // give it a random destination
+                    
                     agent.SetDestination(parentRoom.GetRandomPosInRoom());
 
                 }

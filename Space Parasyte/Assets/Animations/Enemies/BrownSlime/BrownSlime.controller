@@ -21,7 +21,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: df8ea5f3cc7480741967b416aaf1a989, type: 2}
+  m_Motion: {fileID: 7400000, guid: 9896b873952132448abb7055014ef2b5, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -132,7 +132,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Enemy
+  m_Name: BrownSlime
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: isRunning
@@ -218,7 +218,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 4ed8d1b6f5e53c14ca1e1e173ee8e7c3, type: 2}
+  m_Motion: {fileID: 7400000, guid: da5593e31768aeb469f32d35746746f9, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -267,7 +267,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: d5c103d6e5439544f8258262a8771f40, type: 2}
+  m_Motion: {fileID: 7400000, guid: 3ed394704cb09524db52321b37de0271, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

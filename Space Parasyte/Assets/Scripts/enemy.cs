@@ -21,7 +21,7 @@ public class enemy : MonoBehaviour
 
     public int health; 
     public Slider healthSlider;
-    
+    public int spawnerValue;
 
     public GameObject GetSpawnedFrom()
     {
@@ -41,10 +41,14 @@ public class enemy : MonoBehaviour
         healthSlider.maxValue = health;
         healthSlider.gameObject.SetActive(false);
 
+
+        animator.runtimeAnimatorController = SO.animator as RuntimeAnimatorController;
+        spriteRenderer.color = SO.spriteColor;
     }
 
     private void Start()
     {
+
         if (SO.leavesPoisonTrail)
         {
             StartCoroutine(LeavePoisonTrail());
@@ -78,7 +82,7 @@ public class enemy : MonoBehaviour
         player.AwardCoins(SO.rewardedCoins);
         if (spawnedFrom.GetComponent<Spawner>() != null)
         {
-            spawnedFrom.GetComponent<Spawner>().enemiesList.Remove(gameObject);
+            spawnedFrom.GetComponent<Spawner>().spawnedEnemiesList.Remove(gameObject);
         }
         else
         {
@@ -114,6 +118,10 @@ public class enemy : MonoBehaviour
         GameObject text = Instantiate(Utilities.instance.PopupText, transform.position+pos, Quaternion.identity);
         TextMeshProUGUI textComponent = text.GetComponentInChildren<TextMeshProUGUI>();
         textComponent.text = damage.ToString();
+        if (damage > 5)
+        {
+            textComponent.color = new Color(0.915f, 0.279f, 0.1647f);
+        }
         Destroy(text, 1f);
 
         spriteRenderer.color = Color.red;

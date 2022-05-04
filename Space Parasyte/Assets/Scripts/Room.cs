@@ -116,7 +116,7 @@ public class Room : MonoBehaviour
     {
         //if (roomType == RoomType.NormalRoom)
         //{
-            if (enemySpawner.enemiesList.Count <= 0)
+            if (enemySpawner.spawnedEnemiesList.Count <= 0)
             {
                 //all enemies have been defeated
                 hasBeenBeaten = true;

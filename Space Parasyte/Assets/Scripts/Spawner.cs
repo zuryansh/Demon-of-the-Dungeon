@@ -6,11 +6,13 @@ public class Spawner : MonoBehaviour
 {
     public GameObject enemy;
     public Collider2D roomBounds;
+    public int budget;
     public int maxEnemyNum;
     public int currentEnemyNum;
     Room parentRoom;
 
-    public List<GameObject> enemiesList = new List<GameObject>();
+    public GameObject[] enemies;
+    public List<GameObject> spawnedEnemiesList = new List<GameObject>();
     
     bool isSearching;
     public float deadRadius;
@@ -24,34 +26,28 @@ public class Spawner : MonoBehaviour
         //startSpawnTime = spawnTime;
         roomBounds = GetComponent<Collider2D>();
         parentRoom = transform.root.GetComponent<Room>();
+
     }
 
     private void OnEnable()
     {
-        for (int i = 0; i < maxEnemyNum; i++)
-        {
-            SpawnEnemy();
-        }
+        //for (int i = 0; i < maxEnemyNum; i++)
+        //{
+        //    SpawnEnemy();
+        //}
+        SpawnEnemy();
     }
 
     private void OnDisable()
     {
-        foreach (GameObject enemy in enemiesList)
+        foreach (GameObject enemy in spawnedEnemiesList)
         {
             Destroy(enemy);
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
-        if (parentRoom.roomType == Room.RoomType.BossRoom && !once)
-        {
-            maxEnemyNum = 50;
-            once = true;
-        }
-    }
+
 
     //IEnumerator GetEnemyCount()
     //{
@@ -70,16 +66,35 @@ public class Spawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        
-        Vector2 position =  parentRoom.GetRandomPosInRoom();
-        //Vector2 position = new Vector2(Random.Range(-11f, 10f), Random.Range(-10f, 2.7f));
-        GameObject spawned = Instantiate(enemy, position, Quaternion.identity);
-        spawned.GetComponent<enemy>().SetSpawnedFrom(gameObject);
-        //spawned.transform.parent = null;
-        enemiesList.Add(spawned);
-        //Debug.Log("SPAWN");
+        if (budget != 0)
+        {
+
+            Vector2 position = parentRoom.GetRandomPosInRoom();
+            //Vector2 position = new Vector2(Random.Range(-11f, 10f), Random.Range(-10f, 2.7f));
+            GameObject spawned = Instantiate(GetRandomEnemy(), position, Quaternion.identity);
+            spawned.GetComponent<enemy>().SetSpawnedFrom(gameObject);
+            //spawned.transform.parent = null;
+            spawnedEnemiesList.Add(spawned);
+            //Debug.Log("SPAWN");
+            SpawnEnemy();
+        }
     }
 
-
+    GameObject GetRandomEnemy()
+    {
+        enemy enemy = enemies[Random.Range(0, enemies.Length)].GetComponent<enemy>();
+        
+        if ((budget - enemy.SO.spawnerValue < 0))
+        {
+            //we cant afford it
+            Debug.Log( (enemy.SO.spawnerValue  - budget), gameObject);
+            SpawnEnemy(); //try again
+            return null;
+        }
+        // we can afford it
+        budget -= enemy.SO.spawnerValue; // subtract the cost from the total
+        Debug.Log("sucess", enemy.gameObject);
+        return enemy.gameObject;
+    }
     
 }
