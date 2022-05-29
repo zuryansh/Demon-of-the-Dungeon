@@ -46,7 +46,7 @@ public class PoisonPuddle : MonoBehaviour
         if (hasContact)
         {
             isDamaging = true;
-            StartCoroutine(Utilities.player.TakeDamage(damage));
+            StartCoroutine(Utilities.instance.player.TakeDamage(damage));
             yield return new WaitForSeconds(cooldown);
             isDamaging = false;
         }

@@ -6,7 +6,7 @@ public class Spawner : MonoBehaviour
 {
     public GameObject enemy;
     public Collider2D roomBounds;
-    public int budget;
+    [SerializeField]int budget = 10;
     public int maxEnemyNum;
     public int currentEnemyNum;
     Room parentRoom;
@@ -19,7 +19,7 @@ public class Spawner : MonoBehaviour
     PlayerMovement player;
     bool once;
     float startSpawnTime;
-    // Start is called before the first frame update
+
     void Awake()
     {
         player = FindObjectOfType<PlayerMovement>();
@@ -27,15 +27,15 @@ public class Spawner : MonoBehaviour
         roomBounds = GetComponent<Collider2D>();
         parentRoom = transform.root.GetComponent<Room>();
 
+        budget = PlayerPrefs.GetInt("FloorNo",1) * 15;
+
+
     }
+
 
     private void OnEnable()
     {
-        //for (int i = 0; i < maxEnemyNum; i++)
-        //{
-        //    SpawnEnemy();
-        //}
-        SpawnEnemy();
+            SpawnEnemy();
     }
 
     private void OnDisable()
@@ -46,36 +46,18 @@ public class Spawner : MonoBehaviour
         }
     }
 
-
-
-
-    //IEnumerator GetEnemyCount()
-    //{
-    //    isSearching = true;
-    //    currentEnemyNum = GameObject.FindGameObjectsWithTag("Enemy").Length;
-        
-    //    if (currentEnemyNum < maxEnemyNum)
-    //    {
-            
-    //        SpawnEnemy();
-            
-    //    }
-    //    yield return new WaitForSeconds(spawnTime);
-    //    isSearching = false;
-    //}
-
     void SpawnEnemy()
     {
         if (budget != 0)
         {
 
             Vector2 position = parentRoom.GetRandomPosInRoom();
-            //Vector2 position = new Vector2(Random.Range(-11f, 10f), Random.Range(-10f, 2.7f));
+
             GameObject spawned = Instantiate(GetRandomEnemy(), position, Quaternion.identity);
             spawned.GetComponent<enemy>().SetSpawnedFrom(gameObject);
-            //spawned.transform.parent = null;
+
             spawnedEnemiesList.Add(spawned);
-            //Debug.Log("SPAWN");
+
             SpawnEnemy();
         }
     }
@@ -87,13 +69,10 @@ public class Spawner : MonoBehaviour
         if ((budget - enemy.SO.spawnerValue < 0))
         {
             //we cant afford it
-            Debug.Log( (enemy.SO.spawnerValue  - budget), gameObject);
-            SpawnEnemy(); //try again
-            return null;
+            return GetRandomEnemy().gameObject; // try again
         }
         // we can afford it
         budget -= enemy.SO.spawnerValue; // subtract the cost from the total
-        Debug.Log("sucess", enemy.gameObject);
         return enemy.gameObject;
     }
     

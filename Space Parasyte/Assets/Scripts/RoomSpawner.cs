@@ -12,6 +12,7 @@ public class RoomSpawner : MonoBehaviour
     public GameObject leadsToRoom;
     public bool canSetRoom;
     bool once;
+    public bool ENTRYROOM;
 
     List<RaycastHit2D> results = new List<RaycastHit2D>();
     ContactFilter2D contactFilter = new ContactFilter2D();
@@ -161,11 +162,14 @@ public class RoomSpawner : MonoBehaviour
     {
 
         CastColliderFromDoor();
-
         //Debug.Log(results.Count , gameObject);
+        
         if (results.Count > 0)
         {
             leadsToRoom = results[0].transform.root.gameObject;
+        }
+        else if (results.Count <= 0)
+        {
         }
     }
 
@@ -173,7 +177,6 @@ public class RoomSpawner : MonoBehaviour
     {
         if (collision.GetComponent<Player>() != null && canSetRoom)
         {
-            Debug.Log("TRIGGER ENTER" , gameObject);
             Invoke("SetRoom", 0.2f);
         }
 

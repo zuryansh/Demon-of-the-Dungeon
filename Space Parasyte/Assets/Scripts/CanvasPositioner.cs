@@ -13,6 +13,6 @@ public class CanvasPositioner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(Utilities.player.transform.position.x, Utilities.player.transform.position.y, transform.position.z);
+        transform.position = new Vector3(Utilities.instance.player.transform.position.x, Utilities.instance.player.transform.position.y, transform.position.z);
     }
 }

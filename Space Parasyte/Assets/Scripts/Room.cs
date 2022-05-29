@@ -23,6 +23,7 @@ public class Room : MonoBehaviour
     RoomManager roomManager;
 
     public bool hasBeenBeaten = true;
+    public List<Pickup> coinsList = new List<Pickup>();
 
     bool done = true;
     bool once = false;
@@ -33,8 +34,10 @@ public class Room : MonoBehaviour
         CMconfiner = FindObjectOfType<CinemachineConfiner>();
 
         roomManager = FindObjectOfType<RoomManager>();
-        enemySpawner = GetComponentInChildren<Spawner>(true);
-
+        if (enemySpawner == null)
+        {
+            enemySpawner = GetComponentInChildren<Spawner>(true);
+        }
         roomManager.rooms.Add(this);
 
         foreach (RoomSpawner door in GetComponentsInChildren<RoomSpawner>())
@@ -63,18 +66,9 @@ public class Room : MonoBehaviour
                         CMconfiner.m_BoundingShape2D = confiner;
                         SetRoomState();
                     }
-                //}
-                //if (roomType == RoomType.BossRoom)
-                //{
-                //    BossSpawner spawner = GetComponentInChildren<BossSpawner>(true);
-                //    SetSpawnerState(spawner.gameObject);
-                //    CMconfiner.m_BoundingShape2D = confiner;
-                //    SetRoomState(spawner.gameObject);
-                //}
-                // if we are the current room show on the map
+
                 SetMinimapIcon(true);
-                
-            
+     
         }
         else
         {
@@ -125,6 +119,13 @@ public class Room : MonoBehaviour
                 {
                     roomManager.defeatedRooms.Add(gameObject);
                 }
+            foreach (Pickup coin in coinsList)
+            {
+                if (coin.pickupType != Pickup.Type.HealthPotion)
+                {
+                    coin.transform.position = Utilities.instance.player.transform.position;
+                }
+            }
             }
         //}
         
@@ -139,15 +140,15 @@ public class Room : MonoBehaviour
         {
             // it is current room
 
-            if(roomManager.rooms[0] == this && !once)
+            if((roomManager.rooms[0] == this && !once))
             {
                 //it is starting room
                 once = true;
-                yield return new WaitForSeconds(1f);
-            }
+                yield return new WaitForSeconds(5f);
 
+            }
             // set colliders to trigger
-            SetDoorColliders(true);
+                SetDoorColliders(true);
         }
         else
         {
@@ -167,19 +168,22 @@ public class Room : MonoBehaviour
 
     public Vector2 GetRandomPosInRoom()
     {
+
         float x = Random.Range(enemySpawner.roomBounds.bounds.min.x, enemySpawner.roomBounds.bounds.max.x);
         float y = Random.Range(enemySpawner.roomBounds.bounds.min.y, enemySpawner.roomBounds.bounds.max.y);
 
         Vector2 position = new Vector2(x, y);
-        if (Vector2.Distance(position, Utilities.player.transform.position) < enemySpawner.deadRadius)
+        if (Vector2.Distance(position, FindObjectOfType<Player>().transform.position) < 5)
         {
             //too close to player
             GetRandomPosInRoom();
         }
         return position;
+
+        
     }
 
-
+    
    
 
 }

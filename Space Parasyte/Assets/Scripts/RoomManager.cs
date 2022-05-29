@@ -30,7 +30,7 @@ public class RoomManager : MonoBehaviour
     public GameObject BossRoomPrefab;
     
     public TextMeshProUGUI roomCounter;
-
+    bool once;
 
     private void Awake()
     {
@@ -56,6 +56,16 @@ public class RoomManager : MonoBehaviour
     private void Update()
     {
         roomCounter.text = (rooms.Count - defeatedRooms.Count).ToString();
+
+        if (bossRoom != null)
+        {
+            if (bossRoom.hasBeenBeaten && !once)
+            {
+                // we beat the game
+                once = true;
+                StartCoroutine(GameManager.instance.LevelWon());
+            }
+        }
     }
 
     void GetBossRoom()
@@ -68,7 +78,7 @@ public class RoomManager : MonoBehaviour
         //Destroy(bossRoom);
         //bossRoom =Instantiate(BossRoomPrefab, newPosition, Quaternion.identity);
         bossRoom.GetComponentInChildren<Tilemap>().color = Color.blue;
-        bossRoom.enemySpawner.budget += 30;
+        //bossRoom.enemySpawner.budget += 30;
         Instantiate(Utilities.instance.BossSkull, bossRoom.transform.position, Quaternion.identity);
 
     }

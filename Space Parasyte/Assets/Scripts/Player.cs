@@ -26,14 +26,17 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        health = maxHealth;
-        healthSlider.maxValue = health;
-        healthSlider.value = health;
+        health = PlayerPrefs.GetInt("PlayerHealth");
+        //Debug.Log(GameManager.instance.playerHealth + " " + health);
         rb = GetComponent<Rigidbody2D>();
         playerHit = GetComponent<AudioSource>();
 
         animator = GetComponent<Animator>();
+        healthSlider.maxValue = maxHealth;
+        healthSlider.value = health;
     }
+
+    
 
     private void Update()
     {
@@ -64,7 +67,7 @@ public class Player : MonoBehaviour
             canBeDamaged = false;
 
             //Effects
-            CinemachineShake.Instance.ShakeCamera(4f, 1f);
+            CinemachineShake.Instance.ShakeCamera(4f, 0.3f);
             animator.SetTrigger("Hit");
             playerHit.Play();
             
@@ -85,6 +88,7 @@ public class Player : MonoBehaviour
 
     public void Die()
     {
+        PlayerPrefs.SetInt("PlayerHealth", maxHealth);
         coins = 0;
         canBeDamaged = true;
         deathScreen.SetActive(true);

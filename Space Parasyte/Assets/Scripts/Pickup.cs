@@ -12,6 +12,18 @@ public class Pickup : MonoBehaviour
 
     public Type pickupType;
     public int value;
+    bool goToPlayer;
+
+    private void Start()
+    {
+        transform.root.GetComponent<Room>().coinsList.Add(this);
+    }
+
+    private void OnDestroy()
+    {
+        transform.root.GetComponent<Room>().coinsList.Remove(this);
+
+    }
 
 
     private void OnTriggerEnter2D(Collider2D collision)

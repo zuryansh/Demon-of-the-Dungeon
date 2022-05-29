@@ -7,9 +7,9 @@ using UnityEngine.Audio;
 
 public class Utilities : MonoBehaviour
 {
-    public static GameObject pauseScreen;
+    public  GameObject pauseScreen;
     public static Camera MainCam;
-    public static Player player;
+    public  Player player;
     public static PlayerMovement playerMovement;
     public GameObject blood;
     public  AudioSource enemyHit;
@@ -19,7 +19,6 @@ public class Utilities : MonoBehaviour
     public  GameObject PopupText;
     public int roomBudget;
 
-    bool canPlaySound = true;
     private void Start()
     {
         instance = this;
@@ -29,16 +28,16 @@ public class Utilities : MonoBehaviour
         ResetVariables();
     }
 
-    public static void ResetVariables()
+    public void ResetVariables()
     {
-        pauseScreen = GameObject.FindGameObjectWithTag("PauseScreen");
+        //pauseScreen = GameObject.FindGameObjectWithTag("PauseScreen");
 
         if(pauseScreen != null)
             pauseScreen.SetActive(false);
 
         MainCam = Camera.main;
         vCam = FindObjectOfType<CinemachineVirtualCamera>();
-        player = FindObjectOfType<Player>();
+        //player = FindObjectOfType<Player>();
         playerMovement = FindObjectOfType<PlayerMovement>();
         
     }

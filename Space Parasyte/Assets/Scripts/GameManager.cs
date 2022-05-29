@@ -6,6 +6,18 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] bool isPaused;
+    public static GameManager instance;
+    [SerializeField]int currentLevelNo = 1;
+
+    private void Awake()
+    {
+        
+        instance = this;
+        if (PlayerPrefs.GetInt("FloorNo") <= 1)
+        {
+            PlayerPrefs.SetInt("PlayerHealth", 50);
+        }
+    }
 
 
     private void Update()
@@ -15,15 +27,26 @@ public class GameManager : MonoBehaviour
             PauseGame();
         }
         isPaused = (Time.timeScale == 0);
-        //Debug.Log(Time.timeScale);
+        
     }
+
+    //public int GetLevelNo()
+    //{
+    //    Debug.Log("LEVEL NUMBEr--" + levelNo);
+    //    Debug.Log("TIME==" + Time.realtimeSinceStartup);
+    //    return levelNo;
+    //}
 
     public void GoToScene(string scene)
     {
         SceneManager.LoadScene(scene);
-        Utilities.ResetVariables();
-        
-            UnpauseGame();
+        Utilities.instance.ResetVariables();
+        if(scene == "Menu")
+        {
+            FindObjectOfType<FloorManager>().floorNo = 1;
+
+        }
+        UnpauseGame();
         
     }
 
@@ -42,7 +65,7 @@ public class GameManager : MonoBehaviour
         {
             //pause game
             Time.timeScale = 0;
-            Utilities.pauseScreen.SetActive(true);
+            Utilities.instance.pauseScreen.SetActive(true);
             //isPaused = true;
             Debug.Log("PAUSE");
         }
@@ -56,7 +79,7 @@ public class GameManager : MonoBehaviour
         
             //unpause game
             Time.timeScale = 1;
-            Utilities.pauseScreen.SetActive(false);
+            Utilities.instance.pauseScreen.SetActive(false);
             Debug.Log("UNPAUSE");
             //isPaused = false;
         
@@ -64,7 +87,25 @@ public class GameManager : MonoBehaviour
 
     public static void RestartGame()
     {
+        PlayerPrefs.SetInt("PlayerInt", 50);
+        FindObjectOfType<FloorManager>().floorNo = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         
     }
+
+    public IEnumerator LevelWon()
+    {
+        Debug.Log("PLAYER WON");
+        //SetLevelNo();
+        // Set variables
+        PlayerPrefs.SetInt("PlayerHealth", Utilities.instance.player.health);
+        FindObjectOfType<FloorManager>().floorNo++;
+        yield return new WaitForSeconds(3f);
+        //restart scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+
+    }
+
+
 }

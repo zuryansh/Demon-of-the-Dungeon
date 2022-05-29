@@ -84,15 +84,15 @@ public class enemy : MonoBehaviour
         {
             spawnedFrom.GetComponent<Spawner>().spawnedEnemiesList.Remove(gameObject);
         }
-        else
-        {
-            spawnedFrom.GetComponent<BossSpawner>().enemiesList.Remove(gameObject);
-        }
+
         //spawn loot
         if (Random.Range(0, 3) < 1)
         {
-            GameObject drop = SO.loot[Random.Range(0, SO.loot.Length)];
-            Instantiate(drop, transform.position, Quaternion.identity);
+            
+           
+            GameObject loot = Instantiate(GetItemDrop(), transform.position, Quaternion.identity) ;
+            loot.transform.parent = spawnedFrom.transform.root;
+            
         }
 
         foreach (GameObject puddle in trails)
@@ -104,6 +104,17 @@ public class enemy : MonoBehaviour
     }
 
    
+    GameObject GetItemDrop()
+    {
+        GameObject drop = SO.loot[Random.Range(0, SO.loot.Length)];
+        if (PlayerPrefs.GetInt("FloorNo")> 2 && drop.GetComponent<Pickup>().pickupType == Pickup.Type.HealthPotion)
+        {
+            Debug.Log("NOT ALLOWED");
+            // we are not allowd to drop health and it is health
+            drop = GetItemDrop();
+        }
+        return drop;
+    }
 
     public IEnumerator GotHit(int damage)
     {

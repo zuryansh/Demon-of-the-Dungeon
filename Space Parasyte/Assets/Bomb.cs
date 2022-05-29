@@ -6,14 +6,14 @@ public class Bomb : MonoBehaviour
 {
     public int damage;
     public float detonationTime;
-    CircleCollider2D collider2D;
+    CircleCollider2D myCollider;
     public GameObject explosionParticles;
 
     List<Collider2D> results = new List<Collider2D>();
 
     private void Start()
     {
-        collider2D = GetComponent<CircleCollider2D>();
+        myCollider = GetComponent<CircleCollider2D>();
         Invoke("Detonate", detonationTime);
     }
 
@@ -23,7 +23,7 @@ public class Bomb : MonoBehaviour
 
 
         //overlap sphere
-        collider2D.OverlapCollider(filter, results);
+        myCollider.OverlapCollider(filter, results);
         foreach (Collider2D hit in results)
         {
             if (hit.transform.CompareTag("Player"))
@@ -32,7 +32,7 @@ public class Bomb : MonoBehaviour
             }
         }
         Instantiate(explosionParticles, transform.position, Quaternion.identity);
-        CinemachineShake.Instance.ShakeCamera(10f, 1.5f);
+        CinemachineShake.Instance.ShakeCamera(8f, 1f);
         Destroy(gameObject);
 
 

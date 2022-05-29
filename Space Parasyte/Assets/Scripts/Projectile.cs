@@ -19,7 +19,7 @@ public class Projectile : MonoBehaviour
     {
         if (collision.transform.CompareTag("Player"))
         {
-            StartCoroutine(Utilities.player.GetComponent<Player>().TakeDamage(damage));
+            StartCoroutine(Utilities.instance.player.GetComponent<Player>().TakeDamage(damage));
             Destroy(gameObject);
         }
         else
