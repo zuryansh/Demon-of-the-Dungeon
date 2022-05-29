@@ -15,8 +15,8 @@ public class FloorManager : MonoBehaviour
     {
         PlayerPrefs.SetInt("FloorNo", 1);
     }
-    private void Update()
-    {
-        PlayerPrefs.SetInt("FloorNo", floorNo);
-    }
+    //private void Update()
+    //{
+    //    PlayerPrefs.SetInt("FloorNo", floorNo);
+    //}
 }

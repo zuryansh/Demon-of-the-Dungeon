@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6844883406811858138}
   - component: {fileID: 6844883406811858141}
   - component: {fileID: 6844883406811858140}
+  - component: {fileID: 1039564}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -46,8 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPaused: 0
-  LevelNo: 1
-  playerHealth: 50
+  currentLevelNo: 1
 --- !u!114 &6844883406811858141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,3 +157,16 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1039564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6844883406811858143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c99f5a13e27720e4cb2f916bacec0cb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floorNo: 1

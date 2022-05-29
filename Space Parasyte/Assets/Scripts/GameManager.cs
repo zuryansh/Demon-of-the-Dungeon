@@ -7,18 +7,23 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] bool isPaused;
     public static GameManager instance;
-    [SerializeField]int currentLevelNo = 1;
+    public FloorManager floorManager;
 
     private void Awake()
     {
         
         instance = this;
-        if (PlayerPrefs.GetInt("FloorNo") <= 1)
+        if (PlayerPrefs.GetInt("FloorNo",1) <= 1)
         {
-            PlayerPrefs.SetInt("PlayerHealth", 50);
         }
     }
 
+    public void Start()
+    {
+        Debug.LogError("MANAGAER START");
+        PlayerPrefs.SetInt("PlayerHealth", 50);
+        PlayerPrefs.SetInt("FloorNo", 1);
+    }
 
     private void Update()
     {
@@ -27,7 +32,7 @@ public class GameManager : MonoBehaviour
             PauseGame();
         }
         isPaused = (Time.timeScale == 0);
-        
+
     }
 
     //public int GetLevelNo()
@@ -43,8 +48,8 @@ public class GameManager : MonoBehaviour
         Utilities.instance.ResetVariables();
         if(scene == "Menu")
         {
-            FindObjectOfType<FloorManager>().floorNo = 1;
-
+            PlayerPrefs.SetInt("FloorNo", 1);
+            PlayerPrefs.SetInt("PlayerHealth", 50);
         }
         UnpauseGame();
         
@@ -88,7 +93,7 @@ public class GameManager : MonoBehaviour
     public static void RestartGame()
     {
         PlayerPrefs.SetInt("PlayerInt", 50);
-        FindObjectOfType<FloorManager>().floorNo = 1;
+        PlayerPrefs.SetInt("FloorNo", 1);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         
     }
@@ -99,7 +104,7 @@ public class GameManager : MonoBehaviour
         //SetLevelNo();
         // Set variables
         PlayerPrefs.SetInt("PlayerHealth", Utilities.instance.player.health);
-        FindObjectOfType<FloorManager>().floorNo++;
+        PlayerPrefs.SetInt("FloorNo", (PlayerPrefs.GetInt("FloorNo", 0)+1) );
         yield return new WaitForSeconds(3f);
         //restart scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
