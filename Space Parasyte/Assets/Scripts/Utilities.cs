@@ -32,9 +32,10 @@ public class Utilities : MonoBehaviour
     {
         //pauseScreen = GameObject.FindGameObjectWithTag("PauseScreen");
 
-        if(pauseScreen != null)
+        if (pauseScreen != null)
+        {
             pauseScreen.SetActive(false);
-
+        }
         MainCam = Camera.main;
         vCam = FindObjectOfType<CinemachineVirtualCamera>();
         //player = FindObjectOfType<Player>();

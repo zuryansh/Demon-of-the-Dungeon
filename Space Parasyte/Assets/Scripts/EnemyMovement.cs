@@ -71,4 +71,9 @@ public class EnemyMovement : MonoBehaviour
 
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawRay(transform.position, agent.desiredVelocity.normalized);
+    }
 }

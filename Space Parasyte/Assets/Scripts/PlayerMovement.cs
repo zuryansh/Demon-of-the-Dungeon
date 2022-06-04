@@ -128,4 +128,9 @@ public class PlayerMovement : MonoBehaviour
         return input;
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawRay(transform.position, movement.normalized);
+    }
 }

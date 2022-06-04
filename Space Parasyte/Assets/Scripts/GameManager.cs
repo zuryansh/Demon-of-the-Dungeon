@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        Debug.LogError("MANAGAER START");
         PlayerPrefs.SetInt("PlayerHealth", 50);
         PlayerPrefs.SetInt("FloorNo", 1);
     }

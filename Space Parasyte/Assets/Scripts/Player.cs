@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     public int coins = 0;
     public Slider healthSlider;
 
+
     public float invincibilityTime;
     public TextMeshProUGUI coinsText;
     public GameObject deathScreen;
@@ -22,6 +23,7 @@ public class Player : MonoBehaviour
     AudioSource playerHit;
 
     Animator animator;
+    public BoxCollider2D playerCollider;
 
 
     private void Start()
@@ -30,7 +32,6 @@ public class Player : MonoBehaviour
         //Debug.Log(GameManager.instance.playerHealth + " " + health);
         rb = GetComponent<Rigidbody2D>();
         playerHit = GetComponent<AudioSource>();
-
         animator = GetComponent<Animator>();
         healthSlider.maxValue = maxHealth;
         healthSlider.value = health;
@@ -106,6 +107,14 @@ public class Player : MonoBehaviour
             this.health = maxHealth;
         }
         healthSlider.value = this.health;
+
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(playerCollider.bounds.center, playerCollider.bounds.size);
+        
 
     }
 }

@@ -22,6 +22,7 @@ public class enemy : MonoBehaviour
     public int health; 
     public Slider healthSlider;
     public int spawnerValue;
+    public BoxCollider2D colldier;
 
     public GameObject GetSpawnedFrom()
     {
@@ -36,6 +37,7 @@ public class enemy : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         player = FindObjectOfType<Player>();
         animator = GetComponent<Animator>();
+        colldier = GetComponent<BoxCollider2D>();
 
         health = SO.health;
         healthSlider.maxValue = health;
@@ -118,33 +120,51 @@ public class enemy : MonoBehaviour
 
     public IEnumerator GotHit(int damage)
     {
-        Color defaultColor = spriteRenderer.color;
 
-        isAttacked = true;
-        Utilities.instance.EnemyHit();
-        CinemachineShake.Instance.ShakeCamera(0.7f, 0.1f);
-
-        Vector3 pos = new Vector3(Random.Range(0.5f, 1.5f), Random.Range(0.5f, 1.5f), 0);
-
-        GameObject text = Instantiate(Utilities.instance.PopupText, transform.position+pos, Quaternion.identity);
-        TextMeshProUGUI textComponent = text.GetComponentInChildren<TextMeshProUGUI>();
-        textComponent.text = damage.ToString();
-        if (damage > 5)
+        if (!isAttacked)
         {
-            textComponent.color = new Color(0.915f, 0.279f, 0.1647f);
-        }
-        Destroy(text, 1f);
+            Color defaultColor = spriteRenderer.color;
 
-        spriteRenderer.color = Color.red;
-        yield return new WaitForSeconds(0.2f);
-        spriteRenderer.color = defaultColor;
-        isAttacked = false;
-        TakeDamage(damage);
+            isAttacked = true;
+            Utilities.instance.EnemyHit();
+            CinemachineShake.Instance.ShakeCamera(0.7f, 0.1f);
+
+            Vector3 pos = new Vector3(Random.Range(0.5f, 1.5f), Random.Range(0.5f, 1.5f), 0);
+
+            GameObject text = Instantiate(Utilities.instance.PopupText, transform.position + pos, Quaternion.identity);
+            TextMeshProUGUI textComponent = text.GetComponentInChildren<TextMeshProUGUI>();
+            textComponent.text = damage.ToString();
+            if (damage > 5)
+            {
+                textComponent.color = new Color(0.915f, 0.279f, 0.1647f);
+            }
+            Destroy(text, 1f);
+
+            spriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(0.2f);
+            spriteRenderer.color = defaultColor;
+            isAttacked = false;
+            TakeDamage(damage);
+        }
     }
 
     public void SetSpawnedFrom(GameObject spawner)
     {
         spawnedFrom = spawner;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (isAttacked)
+        {
+            Gizmos.color = Color.red;
+        }
+        else
+        {
+
+        Gizmos.color = Color.green;
+        }
+        Gizmos.DrawWireCube(colldier.bounds.center, colldier.bounds.size);
     }
 
 }

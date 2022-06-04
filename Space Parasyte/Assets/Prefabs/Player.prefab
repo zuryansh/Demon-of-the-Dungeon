@@ -282,7 +282,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.54509056, y: 0.58345675}
+  m_Size: {x: 0.56, y: 0.58345675}
   m_EdgeRadius: 0
 --- !u!50 &7122987346398332309
 Rigidbody2D:
@@ -359,6 +359,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackCooldown: 0
   isAttackng: 0
+  skullCount: 10
+  spreadFactor: 2
+  skullSpeed: 10
+  skullPrefab: {fileID: 8448029969560460807, guid: 13b1a3d3e26f94e439f3a1c69750760b, type: 3}
+  powerCharge: 0
+  maxPowerCharge: 10
+  powerBar: {fileID: 0}
 --- !u!114 &7122987346398332305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,6 +387,7 @@ MonoBehaviour:
   invincibilityTime: 0.4
   coinsText: {fileID: 0}
   deathScreen: {fileID: 0}
+  playerCollider: {fileID: 7122987346398332399}
 --- !u!82 &1048796399
 AudioSource:
   m_ObjectHideFlags: 0
@@ -10317,7 +10325,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 2b82f16906d093741aa2771763851d09, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -10368,4 +10376,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 5
-  critChance: 1
+  critChance: 10
+  colldier: {fileID: 7122987347644716672}
