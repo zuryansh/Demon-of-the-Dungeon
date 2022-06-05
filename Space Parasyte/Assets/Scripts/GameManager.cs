@@ -41,10 +41,18 @@ public class GameManager : MonoBehaviour
     //    return levelNo;
     //}
 
-    public void GoToScene(string scene)
+
+
+    public IEnumerator GoToScene(string scene)
     {
+
+        yield return new WaitForSecondsRealtime(1f);
         SceneManager.LoadScene(scene);
-        Utilities.instance.ResetVariables();
+
+        if (Utilities.instance != null)
+        {
+            Utilities.instance.ResetVariables();
+        }
         if(scene == "Menu")
         {
             PlayerPrefs.SetInt("FloorNo", 1);
@@ -83,7 +91,10 @@ public class GameManager : MonoBehaviour
         
             //unpause game
             Time.timeScale = 1;
+        if (Utilities.instance != null)
+        {
             Utilities.instance.pauseScreen.SetActive(false);
+        }
             Debug.Log("UNPAUSE");
             //isPaused = false;
         
@@ -93,7 +104,7 @@ public class GameManager : MonoBehaviour
     {
         PlayerPrefs.SetInt("PlayerInt", 50);
         PlayerPrefs.SetInt("FloorNo", 1);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Transition.instance.GoToScene(SceneManager.GetActiveScene().name);
         
     }
 
@@ -106,7 +117,7 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetInt("FloorNo", (PlayerPrefs.GetInt("FloorNo", 0)+1) );
         yield return new WaitForSeconds(3f);
         //restart scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Transition.instance.GoToScene(SceneManager.GetActiveScene().name);
 
 
     }
