@@ -26,8 +26,8 @@ public class weapon : MonoBehaviour
                 if (Random.Range(0, critChance) <= 1)
                 {
                     attackDamage += 2;
-                    //attackScript.powerCharge += 1;  
-                    
+                    attackScript.powerCharge += 2;
+
                 }
 
                 StartCoroutine(collision.GetComponent<enemy>().GotHit(attackDamage));

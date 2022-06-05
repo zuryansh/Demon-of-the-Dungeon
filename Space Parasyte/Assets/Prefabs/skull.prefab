@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileType: 1
-  velocity: {x: 10, y: 0}
+  velocity: {x: 0, y: 0}
   damage: 10
   hasEffect: 1
   particle: {fileID: 6129822000383440630, guid: eb4c8365227bfbe45b7b442b95fdeb0d, type: 3}
