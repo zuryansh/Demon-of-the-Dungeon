@@ -1,0 +1,84 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PlayerAttack : MonoBehaviour
+{
+    [Header("BASIC ATTACK")]
+    public float attackCooldown;
+    public bool isAttackng;
+
+    [Header("CHARGE ATTACK")]
+    public int skullCount;
+    public float spreadFactor = 1f;
+    public float skullSpeed;
+    public GameObject skullPrefab;
+
+    [Header("POWER BAR")]
+    public float powerCharge = 0;
+    public float maxPowerCharge = 10;
+    public Slider powerBar;
+    public GameObject flameTrail;
+
+    Animator animatior;
+
+    private void Start()
+    {
+        animatior = GetComponent<Animator>();
+        powerBar.maxValue = maxPowerCharge;
+    }
+
+    public void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            StartCoroutine(Attack());
+        }
+        else if (Input.GetMouseButtonDown(1) && powerCharge>=maxPowerCharge)
+        {
+            ChargeAttack();
+        }
+
+        powerBar.value = powerCharge;
+        flameTrail.SetActive(powerCharge >= maxPowerCharge);
+    }
+
+    public void ChargeAttack()
+    {
+        powerCharge = 0;
+
+        for (int i = 0; i < skullCount; i++)
+        {
+            // get target
+            Vector3 target = GetRandomTarget();
+            Vector2 direction =  target - transform.position;
+            
+            GameObject skull = Instantiate(skullPrefab, transform.position, Quaternion.identity);
+            skull.GetComponent<Projectile>().velocity = direction.normalized * skullSpeed;
+        }
+
+    }
+
+    Vector2 GetRandomTarget()
+    {
+        Vector2 mousePos = Utilities.MainCam.ScreenToWorldPoint(Input.mousePosition);
+
+        float x = Random.Range(mousePos.x - spreadFactor, mousePos.x + spreadFactor);
+        float y = Random.Range(mousePos.y - spreadFactor, mousePos.y + spreadFactor);
+
+        return new Vector2(x, y);
+
+    }
+
+    public IEnumerator Attack()
+    {
+
+        animatior.SetTrigger("Attack");
+        isAttackng = true;
+
+        yield return new WaitForSeconds(0.2f);
+
+        isAttackng = false;
+    }
+}

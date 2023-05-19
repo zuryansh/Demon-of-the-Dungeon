@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f80409c25ce250e4b91069d3397632bf, type: 3}
+  m_Name: Melle Enemy 1
+  m_EditorClassIdentifier: 
+  enemyType: 0
+  health: 10
+  rewardedCoins: 5
+  loot:
+  - {fileID: 5278099722470645267, guid: b0138789e92667844ae90f0bfabaaeb5, type: 3}
+  - {fileID: 960093310674846935, guid: 64d52a0c9921b2b42a913f845a071146, type: 3}
+  - {fileID: 1116685777687469755, guid: 79c0afcdc0fbed24d9add5d803e97179, type: 3}
+  - {fileID: 1116685777687469755, guid: 79c0afcdc0fbed24d9add5d803e97179, type: 3}
+  - {fileID: 1116685777687469755, guid: 79c0afcdc0fbed24d9add5d803e97179, type: 3}
+  - {fileID: 1116685777687469755, guid: 79c0afcdc0fbed24d9add5d803e97179, type: 3}
+  - {fileID: 1116685777687469755, guid: 79c0afcdc0fbed24d9add5d803e97179, type: 3}
+  - {fileID: 1116685777687469755, guid: 79c0afcdc0fbed24d9add5d803e97179, type: 3}
+  spawnerValue: 1
+  animator: {fileID: 9100000, guid: 162d29c4ec10cbf4e98ebe401360578b, type: 2}
+  spriteColor: {r: 1, g: 1, b: 1, a: 1}
+  maxSight: 10
+  speed: 3.5
+  damage: 2
+  attackRange: 1.5
+  attackCooldown: 1.5
+  projectileForce: 0
+  projectile: {fileID: 0}
+  leavesPoisonTrail: 0
+  poisonTrail: {fileID: 7147836218601456027, guid: 85962b82ca721264284a5f4433f7a226, type: 3}
+  trailDuration: 1
+  trailcooldown: 1
+  bomb: {fileID: 0}
